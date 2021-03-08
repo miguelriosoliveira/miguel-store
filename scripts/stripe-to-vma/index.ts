@@ -1,24 +1,33 @@
 /**
  * 1. Get all products from Stripe
- * 2. Save on "products.json"
+ * 2. Add them to VMA API
  */
 
 import Stripe from "stripe";
-import dotenv from "dotenv";
 import axios from "axios";
 import crypto from "crypto";
+import { load } from "ts-dotenv";
 
-dotenv.config({ path: ".env.local" });
+const env = load(
+  {
+    STRIPE_SECRET_KEY: String,
+    VMA_API_ADDRESS: String,
+    VMA_API_ID: String,
+    VMA_API_KEY: String,
+    VMA_API_SECRET: String,
+  },
+  ".env.local"
+);
 
-const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
-const VMA_API_ADDRESS = process.env.VMA_API_ADDRESS;
-const VMA_API_ID = process.env.VMA_API_ID;
-const VMA_API_KEY = process.env.VMA_API_KEY;
-const VMA_API_SECRET = process.env.VMA_API_SECRET;
+const STRIPE_SECRET_KEY = env.STRIPE_SECRET_KEY;
+const VMA_API_ADDRESS = env.VMA_API_ADDRESS;
+const VMA_API_ID = env.VMA_API_ID;
+const VMA_API_KEY = env.VMA_API_KEY;
+const VMA_API_SECRET = env.VMA_API_SECRET;
 
 async function getProductsFromStripe() {
   const stripe = new Stripe(STRIPE_SECRET_KEY, {
-    apiVersion: "2020-03-02",
+    apiVersion: "2020-08-27",
   });
   const { data: products } = await stripe.products.list();
   return products;

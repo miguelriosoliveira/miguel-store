@@ -17,7 +17,7 @@ const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const stripe = new Stripe(STRIPE_SECRET_KEY, {
-    apiVersion: "2020-03-02",
+    apiVersion: "2020-08-27",
   });
 
   const { data: products } = await stripe.products.list();
@@ -36,7 +36,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const stripe = new Stripe(STRIPE_SECRET_KEY, {
-    apiVersion: "2020-03-02",
+    apiVersion: "2020-08-27",
   });
 
   const { productId } = params;
