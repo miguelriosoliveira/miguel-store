@@ -63,17 +63,17 @@ const Product: React.FC<Props> = ({ product }) => {
       <h1>{product.name}</h1>
 
       {product.images.map((image) => (
-        <img src={image} style={{ width: "100px" }} />
+        <img key={image} src={image} style={{ width: "100px" }} />
       ))}
 
       {product.prices.map((price) => (
-        <h2>
+        <h2 key={price.id}>
           {Number(price.unit_amount / 100).toFixed(2)}{" "}
           {price.currency.toUpperCase()}
         </h2>
       ))}
 
-      <CheckoutButton productId={product.id} />
+      <CheckoutButton product={product} />
 
       <br />
       <br />

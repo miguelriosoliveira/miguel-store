@@ -9,7 +9,7 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
-    const { productId } = JSON.parse(req.body);
+    const { productId } = req.body;
 
     const product = await stripe.products.retrieve(productId);
 

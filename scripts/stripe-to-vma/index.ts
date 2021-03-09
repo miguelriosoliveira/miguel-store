@@ -5,8 +5,8 @@
 
 import Stripe from "stripe";
 import axios from "axios";
-import crypto from "crypto";
 import { load } from "ts-dotenv";
+import { generateHmacAuthorizationHeader } from "../../utils/hmac";
 
 const env = load(
   {
@@ -21,9 +21,6 @@ const env = load(
 
 const STRIPE_SECRET_KEY = env.STRIPE_SECRET_KEY;
 const VMA_API_ADDRESS = env.VMA_API_ADDRESS;
-const VMA_API_ID = env.VMA_API_ID;
-const VMA_API_KEY = env.VMA_API_KEY;
-const VMA_API_SECRET = env.VMA_API_SECRET;
 
 async function getProductsFromStripe() {
   const stripe = new Stripe(STRIPE_SECRET_KEY, {
@@ -64,21 +61,13 @@ async function addProductsToVma(products: StripeProduct[]) {
     };
   });
 
-  const unixTimestamp = Date.now() / 1000; // in seconds
   const firstProductId = products[0].id;
-  const hmac = crypto
-    .createHmac("sha256", VMA_API_SECRET)
-    .update(`${VMA_API_KEY}${unixTimestamp}${firstProductId}`)
-    .digest("hex");
+  const Authorization = generateHmacAuthorizationHeader(firstProductId);
 
   return axios.post(
     `${VMA_API_ADDRESS}/products`,
     { products: vmaProducts },
-    {
-      headers: {
-        Authorization: `hmac ${VMA_API_ID}:${unixTimestamp}:${hmac}`,
-      },
-    }
+    { headers: { Authorization } }
   );
 }
 
