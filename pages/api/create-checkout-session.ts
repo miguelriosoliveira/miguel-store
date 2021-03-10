@@ -7,7 +7,7 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, {
   apiVersion: "2020-08-27",
 });
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function (req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     const { productId } = req.body;
 
@@ -43,4 +43,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // Handle any other HTTP method
     res.status(200).json({ name: "John Not Post" });
   }
-};
+}
